@@ -7,6 +7,11 @@ from simplecsv import simplecsv
 
 class grit:
 	def __init__(self, dir):
+		#prints banner
+		print("GRIT - Decentralized Code Storage - github.com/dosisod/GRIT\n")
+
+		self.bannr=False #only show banner if it hasnt been shown
+	
 		self.dir=dir #folder storing IPs and index
 		self.home=os.getcwd() #stores where this file is ran from
 		if not os.path.exists(dir):
@@ -36,6 +41,9 @@ class grit:
 	def download(self):
 		pass
 
+	def uploader(self, file): #uploader loop
+		self.zip(file, "temp")
+		
 	def upload(self, file, ip): #will upload file
 		pass
 
@@ -44,8 +52,18 @@ class grit:
 		tar.add(input) #works for folders to
 		tar.close()
 
-	def select(): #file(s) to upload
-		pass
+	def select(self): #file(s) to upload
+		cwd=os.getcwd()+"/"
+		
+		print("base file path ("+cwd+"):", end="")
+		path=input() #get path to root of file, enter is current dir
+		if not path:
+			path=cwd
+
+		print("file/folder to upload: ", end="")
+		file=input()
+
+		self.uploader(path+file) #sends file to uploader
 
 	def merge(self, ips): #appends unique IPs to IP file
 		with open(self.dir+"ips", "a") as f:
