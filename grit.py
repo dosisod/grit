@@ -15,10 +15,10 @@ class grit:
 		if not os.path.exists(dir):
 			os.makedirs(dir)
 
-		self.indexsc=simplecsv(self.dir+"index", "w+") #reads index csv
+		self.indexsc=simplecsv(self.dir+"index", "a+") #reads index csv
 		self.index=self.indexsc.table
 
-		self.ipsc=simplecsv(self.dir+"ips", "w+", delim=".") #IP simplecsv obj
+		self.ipsc=simplecsv(self.dir+"ips", "a+", delim=".") #IP simplecsv obj
 		self.ips=[]
 		for i in self.ipsc.table: #array from csv file
 			temp=[] #temp array for storing values
@@ -26,10 +26,10 @@ class grit:
 				temp.append(int(j)) #IPs must be converted into ints
 			self.ips.append(temp) #appends IP to array
 
-	def ask(self, file): #ask for desc and name for file
-		name=input("name for this file: ")
-		desc=input("description for this file: ")
-		self.add(file, name, desc)
+	def ask(self): #ask for desc and name for file
+		print("These are for your own reference, others will not see this")
+		self.name=input("  Name your project: ")
+		self.desc=input("  Describe your project: ")
 
 	def add(self, file, name, desc): #adds hashes and other info to index file
 		row=[]
@@ -45,8 +45,7 @@ class grit:
 		pass
 
 	def uploader(self, file): #uploader loop
-		self.zip(file, "temp")
-
+		pass
 		#loop through ip list
 		
 	def upload(self, file, ip): #will upload file
@@ -60,14 +59,18 @@ class grit:
 	def select(self): #file(s) to upload
 		cwd=os.getcwd()+"/"
 		
-		path=input("base file path ("+cwd+"):") #get path to root of file, enter is current dir
+		path=input("Base path of project ("+cwd+"): ") #get path to root of file, enter is current dir
 		if not path:
 			path=cwd
 
-		file=input("file/folder to upload: ")
+		file=input("File/folder name of project: ")
 
-		self.ask(file)
-		self.uploader(path+file) #sends file to uploader
+		self.filen=path+file
+
+		self.ask() #get descriptors for file
+		self.zip(self.filen, self.dir+"last") #zip file
+		self.add(self.filen, self.name, self.desc) #add file info to index
+		self.uploader(self.filen) #sends file to uploader
 
 	def merge(self, ips): #appends unique IPs to IP file
 		with open(self.dir+"ips", "a") as f:

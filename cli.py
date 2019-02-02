@@ -1,12 +1,10 @@
 from grit import grit
 
 def main():
-	gg=grit("config/")
+	gg=grit("config/") #open in folder config
 	
-	gg.select()
+	gg.select() #asks for what files we want
 	
-	#gg.add("test.py","123","321")
-	#gg.zip("test.py","out")
 	gg.exit()
 
 if __name__=="__main__":
