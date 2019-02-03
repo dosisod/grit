@@ -57,15 +57,21 @@ class grit:
 		tar.close()
 
 	def select(self): #file(s) to upload
-		cwd=os.getcwd()+"/"
+		while True:
+			cwd=os.getcwd()+"/" #default path is current dir
 		
-		path=input("Base path of project ("+cwd+"): ") #get path to root of file, enter is current dir
-		if not path:
-			path=cwd
+			path=input("Base path of project ("+cwd+"): ") #get path to root of file, enter is current dir
+			if not path:
+				path=cwd
 
-		file=input("File/folder name of project: ")
+			file=input("File/folder name of project: ")
 
-		self.filen=path+file
+			self.filen=path+file
+
+			if os.path.exists(self.filen):
+				break
+			else:
+				print("Project \""+self.filen+"\" not found\n")
 
 		self.ask() #get descriptors for file
 		self.zip(self.filen, self.dir+"last") #zip file
