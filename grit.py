@@ -12,8 +12,8 @@ class grit:
 	
 		self.dir=dir #folder storing IPs and index
 		self.home=os.getcwd() #stores where this file is ran from
-		if not os.path.exists(dir):
-			os.makedirs(dir)
+		if not os.path.exists(self.dir):
+			os.makedirs(self.dir)
 
 		self.indexsc=simplecsv(self.dir+"index", "a+") #reads index csv
 		self.index=self.indexsc.table
@@ -33,8 +33,8 @@ class grit:
 
 	def add(self, file, name, desc): #adds hashes and other info to index file
 		row=[]
-		with open(file, "r") as f: #TODO: pass tarfile to this
-			row.append(b64.b64encode(hashlib.sha512(f.read().encode()).digest()).decode()) #saves file hash and full path to csv
+		with open(file, "rb") as f: #TODO: pass tarfile to this
+			row.append(b64.b64encode(hashlib.sha512(f.read()).digest()).decode()) #saves file hash and full path to csv
 			row.append(os.path.realpath(f.name))
 
 		row.append(name)
@@ -52,6 +52,7 @@ class grit:
 		pass
 
 	def zip(self, input, output): #zips up a file
+		self.tarn=output+".tar.bz2"
 		tar=tarfile.open(output+".tar.bz2", "w:bz2")
 		tar.add(input) #works for folders to
 		tar.close()
@@ -75,7 +76,7 @@ class grit:
 
 		self.ask() #get descriptors for file
 		self.zip(self.filen, self.dir+"last") #zip file
-		self.add(self.filen, self.name, self.desc) #add file info to index
+		self.add(self.tarn, self.name, self.desc) #add file info to index
 		self.uploader(self.filen) #sends file to uploader
 
 	def merge(self, ips): #appends unique IPs to IP file
