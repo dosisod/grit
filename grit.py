@@ -27,15 +27,20 @@ class grit:
 			self.ips.append(temp) #appends IP to array
 
 	def ask(self): #ask for desc and name for file
-		print("These are for your own reference, others will not see this")
-		self.name=input("  Name your project: ")
-		self.desc=input("  Describe your project: ")
+		print("Below is for your own reference, others will not see this")
+		while True: #loop until user has correct settings
+			self.name=input("  Name your project: ")
+			self.desc=input("  Describe your project: ")
+			
+			correct=input("    Is this correct (Y/n): ")
+			if correct=="Y" or correct=="y" or correct=="":
+			    break
 
 	def add(self, file, name, desc): #adds hashes and other info to index file
 		row=[]
-		with open(file, "rb") as f: #TODO: pass tarfile to this
+		with open(file, "rb") as f:
 			row.append(b64.b64encode(hashlib.sha512(f.read()).digest()).decode()) #saves file hash and full path to csv
-			row.append(os.path.realpath(f.name))
+			row.append(os.path.realpath(self.filen)) #puts name of original file not tar file
 
 		row.append(name)
 		row.append(desc)
